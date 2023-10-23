@@ -1,6 +1,8 @@
 import 'dotenv/config'
 
-import { IConnectionInformation, CreatePool } from './db';
+import { GetAll } from './services/user.service';
+
+import { IConnectionInformation, CreatePool } from './repo/db';
 const pool = CreatePool({
     host: process.env.HOST!,
     data: process.env.DATABASE!,
@@ -14,8 +16,9 @@ const app = express()
 
 const port = 3000;
 
-app.get("", (req,res)=>{
-    res.send("Hello World")
+app.get("", async (req,res)=>{
+    let db_res = await GetAll(pool)
+    res.send(db_res)
 })
 
 app.listen(port, ()=>{
