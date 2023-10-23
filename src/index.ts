@@ -1,6 +1,6 @@
 import 'dotenv/config'
 
-import { GetAll } from './services/user.service';
+import { GetAll, GetUserById } from './services/user.service';
 
 import { IConnectionInformation, CreatePool } from './repo/db';
 const pool = CreatePool({
@@ -16,8 +16,16 @@ const app = express()
 
 const port = 3000;
 
-app.get("", async (req,res)=>{
+app.get("/", async (req,res)=>{
     let db_res = await GetAll(pool)
+    res.send(db_res)
+})
+
+app.get("/:uuid", async (req,res)=>{
+    let id = req.params.uuid
+    console.log(id);
+    
+    let db_res = await GetUserById(pool, req.params.uuid)
     res.send(db_res)
 })
 
