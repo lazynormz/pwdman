@@ -23,8 +23,6 @@ app.get("/", async (req,res)=>{
 
 app.get("/:uuid", async (req,res)=>{
     let id = req.params.uuid
-    console.log(id);
-    
     let db_res = await GetUserById(pool, req.params.uuid)
     res.send(db_res)
 })
