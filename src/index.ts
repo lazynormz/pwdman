@@ -1,6 +1,6 @@
 import 'dotenv/config'
 
-import { GetAll, GetUserById } from './services/user.service';
+import { GetAll, GetUserById, RegisterNewUser } from './services/user.service';
 
 import { IConnectionInformation, CreatePool } from './repo/db';
 const pool = CreatePool({
@@ -12,7 +12,10 @@ const pool = CreatePool({
 })
 
 import express from 'express';
+import { UserDTO } from './DTO/user.dto';
 const app = express()
+
+app.use(express.json())
 
 const port = 3000;
 
@@ -27,6 +30,18 @@ app.get("/:uuid", async (req,res)=>{
     res.send(db_res)
 })
 
+app.post("/reg/", async (req,res)=>{
+    console.log(req.body);
+    
+    const new_user_info: UserDTO = {username: req.body.username, password: req.body.password}
+    let db_res = await RegisterNewUser(pool, new_user_info)
+    if(db_res !== undefined){
+        res.status(404).send(db_res.error)
+    }else{
+        res.send("User successfully created...")
+    }
+})
+ 
 app.listen(port, ()=>{
     console.log(`Listening on http://localhost:${port}`);
 })

@@ -1,5 +1,5 @@
 interface UserDTO {
-    UUID: string,
+    UUID?: string,
     username?: string,
     password?: string
 }

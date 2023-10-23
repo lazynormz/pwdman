@@ -1,5 +1,6 @@
 import { Pool } from "mariadb"
 import { IDatabaseOptions, IDatabaseQuery, IDatabaseResponse } from "./db"
+import { UserDTO } from "../DTO/user.dto"
 
 const GetAllUsers = async (pool: Pool, opt: IDatabaseOptions): Promise<IDatabaseResponse> => {
 
@@ -41,7 +42,7 @@ const GetUserByID = async (pool: Pool, query: IDatabaseQuery): Promise<IDatabase
         //Establish connection
         conn = await pool.getConnection()
 
-        let rows: string[]=[]
+        let rows: string[] = []
 
         //Fetch data
         if(query.table){
@@ -62,7 +63,32 @@ const GetUserByID = async (pool: Pool, query: IDatabaseQuery): Promise<IDatabase
     }
 }
 
+const RegisterUser = async (pool: Pool, new_user: UserDTO): Promise<IDatabaseResponse> => {
+
+    let res: IDatabaseResponse = {data:[],status:"OK"}
+
+    let conn
+
+    try {
+        conn = await pool.getConnection()
+
+        const db_res = await conn.query(`INSERT INTO user (username, password) VALUES ("${new_user.username}", "${new_user.password}")`)
+
+        console.log(res);
+
+        res.data = db_res
+        
+    }catch(err){
+        res.data = undefined
+        res.status = err
+    }finally{
+        if (conn) conn.end()
+        return res
+    }
+}
+
 export {
     GetAllUsers,
     GetUserByID,
+    RegisterUser,
 }
