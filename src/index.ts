@@ -13,24 +13,36 @@ const pool = CreatePool({
 })
 
 import express from 'express';
+import { Route } from './shared/interfaces';
 const app = express()
 
 app.use(express.json())
 
 const port = 3000;
 
-app.get("/", async (req, res) => {
-    GetAllUsers(req, res, pool)
+// Create and all the routes for our application
+const ROUTES: Route[] = [
+    { method: 'GET', route: "/", callback: GetAllUsers },
+    { method: 'GET', route: "/:uuid", callback: GetUserId },
+    { method: 'POST', route: "/reg/", callback: RegisterUser }
+]
+
+// Map all of our routes to the express application
+ROUTES.forEach(r => {
+    switch (r.method) {
+        case 'GET':
+            app.get(r.route, async (req, res) => { r.callback(req, res, pool) })
+        case 'POST':
+            app.post(r.route, async (req, res) => { r.callback(req, res, pool) })
+        case 'PUT':
+        case 'DELETE':
+        case 'UPDATE':
+        default:
+            break
+    }
 })
 
-app.get("/:uuid", async (req, res) => {
-    GetUserId(req, res, pool)
-})
-
-app.post("/reg/", async (req, res) => {
-    RegisterUser(req,res,pool)
-})
-
+// Start the server and listens for requests
 app.listen(port, () => {
     console.log(`Listening on http://localhost:${port}`);
 })
