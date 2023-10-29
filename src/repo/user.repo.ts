@@ -65,7 +65,10 @@ const GetUserByID = async (pool: Pool, query: IDatabaseQuery): Promise<IDatabase
 
 const RegisterUser = async (pool: Pool, new_user: UserDTO): Promise<IDatabaseResponse> => {
 
-    let res: IDatabaseResponse = {data:[],status:"OK"}
+    let res: IDatabaseResponse = {
+        data: undefined,
+        status: undefined
+    }
 
     let conn
 
@@ -74,8 +77,9 @@ const RegisterUser = async (pool: Pool, new_user: UserDTO): Promise<IDatabaseRes
 
         const db_res = await conn.query(`INSERT INTO user (username, password) VALUES ("${new_user.username}", "${new_user.password}")`)
 
-        console.log(res);
+        console.log(db_res);
 
+        res.status = 200
         res.data = db_res
         
     }catch(err){
@@ -86,6 +90,7 @@ const RegisterUser = async (pool: Pool, new_user: UserDTO): Promise<IDatabaseRes
         return res
     }
 }
+
 
 export {
     GetAllUsers,

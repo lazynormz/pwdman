@@ -12,9 +12,19 @@ interface IConnectionInformation {
     connectionLimit: number
 }
 
+interface IDatabaseErrorInterface {
+    name: string,
+    sqlMessage: string,
+    sql: string,
+    fatal: boolean,
+    errno: number,
+    sqlSatate: string,
+    code: string
+}
+
 interface IDatabaseResponse {
-    data: string[] | undefined,
-    status: string | unknown 
+    data: string[] | string |undefined,
+    status: number | unknown | IDatabaseErrorInterface
 }
 
 interface IDatabaseOptions {
@@ -36,4 +46,5 @@ export {
     IDatabaseResponse,
     IDatabaseOptions,
     IDatabaseQuery,
+    IDatabaseErrorInterface 
 }

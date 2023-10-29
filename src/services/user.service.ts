@@ -2,6 +2,7 @@ import { UserDTO } from "../DTO/user.dto"
 import { GetAllUsers, GetUserByID, RegisterUser } from "../repo/user.repo"
 import { Pool } from "mariadb"
 import { SingularUserFromDb, UsersFromDb,  } from "../util/user.util"
+import { IDatabaseResponse } from "../repo/db"
 
 
 
@@ -14,16 +15,13 @@ const GetUserById = async (pool: Pool, uuid: string): Promise<UserDTO> => {
     return await SingularUserFromDb(await GetUserByID(pool, {query: q}))
 }
 
-const RegisterNewUser = async (pool:Pool, user_info: UserDTO): Promise<IServiceValidation | undefined> => {
+const RegisterNewUser = async (pool:Pool, user_info: UserDTO): Promise<IDatabaseResponse> => {
+    let _res: IDatabaseResponse = {data:[], status:200}
     if(user_info.username === undefined || user_info.username === null || user_info.username === "" || user_info.password === undefined ||user_info.password === null ||user_info.password === "") {
-        return {error: "Either the password or username field are empty..."}
+        return {data:["Either the password or username field are empty..."], status:400}
     }
-    await RegisterUser(pool, user_info)
-    return undefined
-}
-
-interface IServiceValidation {
-    error: string
+    _res = await RegisterUser(pool, user_info)
+    return _res
 }
 
 export {
