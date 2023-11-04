@@ -1,6 +1,7 @@
 import 'dotenv/config'
 
 import { GetAllUsers, GetUserId } from './controllers/user.controller';
+import { RegisterPassword } from './controllers/password.controller';
 import { RegisterUser } from './controllers/account.controller';
 import { Route } from './shared/interfaces';
 import { CreatePool } from './repo/db';
@@ -24,7 +25,8 @@ const port = 3000;
 const ROUTES: Route[] = [
     { method: 'GET', route: "/", callback: GetAllUsers },
     { method: 'GET', route: "/:uuid", callback: GetUserId },
-    { method: 'POST', route: "/reg/", callback: RegisterUser }
+    { method: 'POST', route: "/reg/", callback: RegisterUser },
+    { method: 'POST', route: "/pwd/register", callback: RegisterPassword }
 ]
 
 // Map all of our routes to the express application
