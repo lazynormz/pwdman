@@ -2,8 +2,9 @@ import 'dotenv/config'
 
 import { GetAllUsers, GetUserId } from './controllers/user.controller';
 import { RegisterUser } from './controllers/account.controller';
-
+import { Route } from './shared/interfaces';
 import { CreatePool } from './repo/db';
+
 const pool = CreatePool({
     host: process.env.HOST!,
     data: process.env.DATABASE!,
@@ -13,7 +14,6 @@ const pool = CreatePool({
 })
 
 import express from 'express';
-import { Route } from './shared/interfaces';
 const app = express()
 
 app.use(express.json())
